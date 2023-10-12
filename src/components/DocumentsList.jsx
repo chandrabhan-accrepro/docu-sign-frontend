@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import SigningComp from "./SigningComp";
+import config from "./config";
 
 function DocumentsList() {
   const [allDocuments, setAllDocuments] = useState([]);
@@ -12,9 +13,11 @@ function DocumentsList() {
 
   useEffect(() => {
     const getAllDocuments = async () => {
-      const response = await axios.get(
-        "http://localhost:8000/api/getDocuments"
-      );
+      const apiUrl =
+        process.env.NODE_ENV === "production"
+          ? config.productionUrl
+          : config.localUrl;
+      const response = await axios.get(`${apiUrl}/api/getDocuments`);
       console.log("All document Fetched:", response.data.result);
       setAllDocuments(response.data.result);
     };

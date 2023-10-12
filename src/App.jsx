@@ -11,6 +11,7 @@ import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import DocumentsList from "./components/DocumentsList";
 import { Modal, Button } from "react-bootstrap";
+import config from "./components/config";
 
 function App() {
   const [signed, setSigned] = useState(false);
@@ -31,10 +32,12 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
+      const apiUrl =
+        process.env.NODE_ENV === "production"
+          ? config.productionUrl
+          : config.localUrl;
       try {
-        const response = await axios.get(
-          "http://localhost:8000/statusenveloper"
-        );
+        const response = await axios.get(`${apiUrl}/statusenveloper`);
         console.log(response.data);
         const envelopes = response.data.results.envelopes;
         const updatedEnvelopes = envelopes.map((item) => {
