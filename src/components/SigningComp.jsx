@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 
-function SigningComp() {
+function SigningComp({ fileNameForSign }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [docuSignUrl, setDocuSignUrl] = useState("");
@@ -11,8 +11,8 @@ function SigningComp() {
   const [envelopIdCont, setEnvelopIdCont] = useState(null);
   const [subject, setSubject] = useState("");
   const [emailBody, setEmailBody] = useState("");
-  const localstorageData = localStorage.getItem("myData")
-    ? JSON.parse(localStorage.getItem("myData"))
+  const localstorageData = localStorage.getItem("receiver-details")
+    ? JSON.parse(localStorage.getItem("receiver-details"))
     : [];
 
   const openModal = () => {
@@ -45,6 +45,7 @@ function SigningComp() {
       email,
       subject,
       emailBody,
+      fileNameForSign,
     });
     console.log(response.data.url);
     setDocuSignUrl(response.data.url);
@@ -59,14 +60,15 @@ function SigningComp() {
       const status = "pending";
       const userData = {
         id: response.data.envelopeId,
-        name,
-        email,
-        subject,
-        emailBody,
-        status,
+        signerName: name,
+        signerEmail: email,
+        signerSubject: subject,
+        signerEmailBody: emailBody,
+        statusUser: status,
+        fileNameForSign,
       };
       const dataJSON = [...localstorageData, userData];
-      localStorage.setItem("myData", JSON.stringify(dataJSON));
+      localStorage.setItem("receiver-details", JSON.stringify(dataJSON));
       alert("Document successfully sent to provided email !!!");
     }
   };
