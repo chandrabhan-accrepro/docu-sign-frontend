@@ -33,6 +33,7 @@ function App() {
     process.env.NODE_ENV === "production"
       ? config.productionUrl
       : config.localUrl;
+  console.log("App.js : ", apiUrl);
   useEffect(() => {
     async function fetchData() {
       setLoading(true);

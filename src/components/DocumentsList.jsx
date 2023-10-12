@@ -14,6 +14,7 @@ function DocumentsList() {
     process.env.NODE_ENV === "production"
       ? config.productionUrl
       : config.localUrl;
+  console.log("Document List: ", apiUrl);
   useEffect(() => {
     const getAllDocuments = async () => {
       const apiUrl =

@@ -12,7 +12,7 @@ function SignedDocsView() {
     process.env.NODE_ENV === "production"
       ? config.productionUrl
       : config.localUrl;
-
+  console.log("Signed Docs View: ", apiUrl);
   useEffect(() => {
     downloadPdf();
   }, []);

@@ -20,6 +20,7 @@ function SigningComp({ fileNameForSign }) {
       ? config.productionUrl
       : config.localUrl;
 
+  console.log("SigningComp: ", apiUrl);
   const openModal = () => {
     setShowModal(true);
   };
