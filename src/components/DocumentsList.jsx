@@ -10,7 +10,10 @@ function DocumentsList() {
   const [showModal, setShowModal] = useState(false);
   const [showModalSignature, setShowModalSignature] = useState(false);
   const [fileNameForSign, SetFileNameForSign] = useState("");
-
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? config.productionUrl
+      : config.localUrl;
   useEffect(() => {
     const getAllDocuments = async () => {
       const apiUrl =
@@ -67,9 +70,7 @@ function DocumentsList() {
                   <a
                     href="#"
                     onClick={() => {
-                      setUrl(
-                        `http://localhost:8000/api/getDocuments/${filename}`
-                      );
+                      setUrl(`${apiUrl}/api/getDocuments/${filename}`);
                       openModal();
                     }}
                   >

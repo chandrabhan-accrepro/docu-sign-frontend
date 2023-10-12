@@ -29,6 +29,10 @@ function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   // localStorageData ? localStorageData.splice(-10).reverse() : []
 
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? config.productionUrl
+      : config.localUrl;
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -71,18 +75,22 @@ function App() {
   const checkDocSigned = async (envelopId) => {
     try {
       setLoading(true);
+      const apiUrl =
+        process.env.NODE_ENV === "production"
+          ? config.productionUrl
+          : config.localUrl;
       const signerDetailsVar = SignersData.find(
         (item) => item.id === envelopId
       );
       const response = await axios.get(
-        `http://localhost:8000/checkstatus?envelopId=${envelopId}&docName=${signerDetailsVar.fileNameForSign}`
+        `${apiUrl}/checkstatus?envelopId=${envelopId}&docName=${signerDetailsVar.fileNameForSign}`
       );
       console.log(response.data);
       console.log(response.data.results.status);
       if (response.data.results.status === "completed") {
         try {
           console.log("EnvelopID: ", envelopId);
-          const response = await axios.post("http://localhost:8000/getDoc", {
+          const response = await axios.post(`${apiUrl}/getDoc`, {
             envelopeId: envelopId,
             docName: signerDetailsVar.fileNameForSign,
           });
@@ -119,18 +127,19 @@ function App() {
 
   const handleForm = async () => {
     if (selectedFile) {
+      const apiUrl =
+        process.env.NODE_ENV === "production"
+          ? config.productionUrl
+          : config.localUrl;
       const formData = new FormData();
       formData.append("file", selectedFile);
       try {
-        const response = await axios.post(
-          "http://localhost:8000/uploadnewfile",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post(`${apiUrl}/uploadnewfile`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        alert("File Uploaded successfully !!!");
         console.log("File Uploaded: ", response.data);
       } catch (error) {
         console.error("Error uploading file:", error);
@@ -256,7 +265,7 @@ function App() {
                             href="#"
                             onClick={() => {
                               setUrl(
-                                `http://localhost:8000/api/getDocuments/${item?.fileNameForSign}`
+                                `${apiUrl}/api/getDocuments/${item?.fileNameForSign}`
                               );
                               setShowModal(true);
                             }}

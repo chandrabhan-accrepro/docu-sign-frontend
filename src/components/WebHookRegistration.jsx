@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
+import config from "./config";
 
 const WebhookRegistration = () => {
   const [registrationStatus, setRegistrationStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? config.productionUrl
+      : config.localUrl;
   const handleWebhookRegistration = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/statusenveloper");
+      const response = await axios.get(`${apiUrl}/statusenveloper`);
       console.log(response.data);
       //   if (response.status === 201) {
       //     setRegistrationStatus("Webhook registered successfully");

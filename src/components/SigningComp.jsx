@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
+import config from "./config";
 
 function SigningComp({ fileNameForSign }) {
   const [name, setName] = useState("");
@@ -14,6 +15,10 @@ function SigningComp({ fileNameForSign }) {
   const localstorageData = localStorage.getItem("receiver-details")
     ? JSON.parse(localStorage.getItem("receiver-details"))
     : [];
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? config.productionUrl
+      : config.localUrl;
 
   const openModal = () => {
     setShowModal(true);
@@ -25,7 +30,7 @@ function SigningComp({ fileNameForSign }) {
   const handleSave = async () => {
     try {
       console.log("EnvelopID: ", envelopIdCont);
-      const response = await axios.post("http://localhost:8000/getDoc", {
+      const response = await axios.post(`${apiUrl}/getDoc`, {
         envelopeId: envelopIdCont,
       });
       console.log("Document successfully got: ", response.data);
@@ -40,7 +45,7 @@ function SigningComp({ fileNameForSign }) {
   const Sign_doc_func = async (action) => {
     console.log(subject, emailBody);
     setLoading(true);
-    const response = await axios.post("http://localhost:8000/form", {
+    const response = await axios.post("${apiUrl}/form", {
       name,
       email,
       subject,

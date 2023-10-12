@@ -2,11 +2,16 @@ import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
+import config from "./config";
 
 function SignedDocsView() {
   const [pdfUrl, setPdfUrl] = useState([]);
   const [url, setUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? config.productionUrl
+      : config.localUrl;
 
   useEffect(() => {
     downloadPdf();
@@ -21,7 +26,7 @@ function SignedDocsView() {
   }
 
   async function getPdf() {
-    return axios.get("http://localhost:8000/api/v1/getPdfs", {
+    return axios.get(`${apiUrl}/api/v1/getPdfs`, {
       // headers: {
       //   "Content-Type": "multipart/form-data",
       // },
@@ -74,7 +79,7 @@ function SignedDocsView() {
                   <a
                     href="#"
                     onClick={() => {
-                      setUrl(`http://localhost:8000/api/v1/getPdf/${filename}`);
+                      setUrl(`${apiUrl}/api/v1/getPdf/${filename}`);
                       openModal();
                     }}
                   >
